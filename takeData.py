@@ -15,8 +15,6 @@ DATA_PATH = os.path.join('MP_Data')
 # Actions that we try to detect
 actions = np.array(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
 'Q', 'R', 'S', 'T', '-'])
-#actions = np.array(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'])
-#actions = np.array(['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', '-'])
 
 # Thirty videos worth of data
 no_sequences = 30

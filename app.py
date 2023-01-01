@@ -207,7 +207,6 @@ actions = np.array(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 
 
 #Loading model
 model = Sequential()
-#model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,1662)))
 model.add(LSTM(64, return_sequences=True, activation='relu', input_shape=(30,258)))
 model.add(LSTM(128, return_sequences=True, activation='relu'))
 model.add(LSTM(64, return_sequences=False, activation='relu'))
@@ -218,19 +217,6 @@ model.add(Dense(actions.shape[0], activation='softmax'))
 model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
 model.load_weights('20letters.h5')
 cap = cv2.VideoCapture(0)
-# def do_detection():
-#     ret, frame = cap.read()
-#     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) 
-#     results = pose.process(image)
-#     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS, 
-#         mp_drawing.DrawingSpec(color=(106,13,173), thickness=4, circle_radius = 5), 
-#         mp_drawing.DrawingSpec(color=(255,102,0), thickness=5, circle_radius = 10))
-#     img = image[:, :460, :] 
-#     imgarr = Image.fromarray(img)
-#     imgtk = ImageTk.PhotoImage(imgarr) 
-#     lmain.imgtk = imgtk 
-#     lmain.configure(image=imgtk)
-#     lmain.after(10, do_detection)
 sequence = []
 sentence = []
 threshold = 0.9
@@ -247,7 +233,6 @@ def do_detection():
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) 
     #Make dectection
     image,results=mediapipe_detection(frame, holistic)
-    #print(results)
     # Draw landmark
     draw_styled_landmarks(image,results)
     keypoints = extract_keypoints(results)
@@ -257,9 +242,7 @@ def do_detection():
     
     if len(sequence) == 30:
         res = model.predict(np.expand_dims(sequence, axis=0))[0]
-        #print(actions[np.argmax(res)])
         predictions.append(np.argmax(res))
-        
     #3. Viz logic
         if np.unique(predictions[-10:])[0]==np.argmax(res):
             if res[np.argmax(res)] > threshold: 
@@ -267,10 +250,8 @@ def do_detection():
                 if len(sentence) > 0: 
                     if actions[np.argmax(res)] != sentence[-1]:
                         sentence.append(actions[np.argmax(res)])
-
                 else:
                     sentence.append(actions[np.argmax(res)])
-
         if len(sentence) > 5: 
             sentence = sentence[-5:]
 
@@ -278,7 +259,6 @@ def do_detection():
         for num, prob in enumerate(res):
             probList[num]=round(prob*100,1)
         changeProb(probList)
-        
         labelDetection.configure(text=sentence[-1])
     
     img = image[:, :600, :]
@@ -287,7 +267,5 @@ def do_detection():
     lmain.imgtk = imgtk 
     lmain.configure(image=imgtk)
     lmain.after(1, do_detection)
- #   for num, prob in enumerate(res)
-
 do_detection()
 window.mainloop()
