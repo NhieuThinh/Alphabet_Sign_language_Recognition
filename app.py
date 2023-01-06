@@ -20,7 +20,7 @@ probList=np.array(["","","","","","","","","","","","","","","","","","","","","
 window = tk.Tk()
 window.geometry("900x600")
 window.title("Alphabet Sign Language Detection")
-ck.set_appearance_mode("dark")
+#ck.set_appearance_mode("dark")
 labelProb= ck.CTkLabel(window, height=40, width=120, text_font=("Arial", 20), text_color="black", padx=10)
 labelProb.place(x=630, y=10)
 labelProb.configure(text='PROBABILITY') 
